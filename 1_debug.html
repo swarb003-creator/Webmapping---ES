@@ -41,11 +41,13 @@
     <!-- start of our CSS styles -->
     <style>
         h1 {
-            color: white;
-        }
-        .map {
+            color: black;
+        }    
+        /*Fixed error 1: Changed color to black so it text would show up.*/
+        #map {
             border: 4px solid red;
         }
+        /*Fixed error 2: Fixed the html and CSS script to display the boarder. "#" was needed insead of "."
     </style>
 </head>
 <body>
@@ -55,22 +57,26 @@
     </div>
     
     <div id="map" style="width: 600px; height: 400px;"></div>
+    <!-- Leaflet JavaScript library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
+    <!--Fixed Error 4: Moved Leaflet script above JavaScript so it reads it before-->
+
     <!-- start of our JavaScript code -->
     <script>
         // Initialize the map
-        let map = L.map('mapElement')
+        let map = L.map('map')
+        /*Fixed Error 3: Fixed the div element's ID did not mat the ID provided to the leaflet map*/
         // Center the map on UMD campus, and set the zoom level
-        map.setView([-92.08, 46.82], 15);
+        map.setView([46.82,-92.08], 15);
+        /*Fixed Error 6: The cooordiantes were backwards so I flipped them*/
         
         // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.orgg/{z}/{x}/{y}.png', {
-            maxZoom: 19,
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19, /*Fixed Error 5: Fixing tile layer link spelling mistakes*/
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
     </script>
         
-    <!-- Leaflet JavaScript library -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>
