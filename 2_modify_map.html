@@ -24,8 +24,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Most Basic Web Map</title>
-    
+    <title>Restaurants that serve brussle sprouts in Duluth</title>
+<!--Changed map title - ES-->
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
@@ -33,28 +33,49 @@
 </head>
 <body>
     <!-- Header at the top of the page -->
-    <div class="header">
-        <h1>A Mostly Basic Web Map</h1>
-        <h3>by: Your Name Here</h3>
+    <div class="header" style="text-align: center;">
+        <!--Centered header and sub header - ES-->
+        <h1>Restaurants that Serve Brussel Sprouts in Duluth</h1>
+        <h3>by: Ella Swarbrick</h3> <!--Changed heading title and added my name - ES-->
     </div>
-    <div id="map" style="width: 600px; height: 400px;"></div>
+    <div id="map" style="width: 1300px; height: 400px;"></div>
+        <!--Changed map size to fit page - ES-->
     
     <!-- Leaflet JavaScript library -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
         // Initialize the map, center it on UMD campus, and set the zoom level
-        const map = L.map('map').setView([46.82, -92.08], 13);
-
+        const map = L.map('map').setView([46, -92], 11);
+        // Changed coodinates to center map on Duluth - ES
         // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        // Changed the tile layer to one that I liked better - ES
+        const tiles = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+  
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
         }).addTo(map);
+        
+        // Added markers for resturants that serve brussel sprouts - ES      
+const marker = L.marker ([46.8104,-92.0829]).addTo(map);
+marker.bindPopup("<b>At Sara's Table Chester Creek Cafe</b><br>Has Korean BBQ and Maple Lemon Brussel Sprouts").openPopup();
 
-        // Add a marker for the UMD campus
-        const marker = L.marker([46.82, -92.085]).addTo(map);
-        marker.bindPopup("<b>University of Minnesota Duluth</b><br>A great place to learn about GIS!").openPopup();
+const marker2 = L.marker ([46.7685841,-92.1218942]).addTo(map);
+marker2.bindPopup("<b>Corktown</b><br>Has Hot Honey Brussel Sprouts").openPopup();
+
+        //HTML content for pop-up with image - ES
+const htmlContent =`
+        <div class="popup">
+            <h3>Black Woods Grill & Bar</h3>
+            <img src="https://www.pinkwhen.com/wp-content/uploads/2023/11/bacon-roasted-brussels-sprouts-featured.jpg" width="250px"></img>
+            <p> Has Roasted Brussel Sprouts & Bacon</p>
+        </div>`;
+const marker3 = L.marker ([46.8089282,-92.0619525]).addTo(map);
+        marker3.bindPopup(htmlContent).openPopup();
     </script>
 </body>
+<!--Added paragraph and centered it on webpage - ES-->
+    <div style="text-align: center;">
+        <p1>This map shows three different resturants in Duluth, MN that serve brussel sprouts. Each resturant shown serves a different type of brussel sprout. If you are a brussel sprout lover and are visiting Duluth soon make sure to check these resturants out!</p1>
+    </div>
 </html>
