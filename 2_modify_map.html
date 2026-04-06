@@ -35,7 +35,7 @@
     <!-- Header at the top of the page -->
     <div class="header" style="text-align: center;">
         <!--Centered header and sub header - ES-->
-        <h1>Restaurants that Serve Brussel Sprouts in Duluth</h1>
+        <h1>Restaurants that Serve Brussels Sprouts in Duluth</h1>
         <h3>by: Ella Swarbrick</h3> <!--Changed heading title and added my name - ES-->
     </div>
     <div id="map" style="width: 1300px; height: 400px;"></div>
@@ -52,7 +52,7 @@
         // Changed the tile layer to one that I liked better - ES
         const tiles = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
 	maxZoom: 19,
-  
+
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
         }).addTo(map);
         
@@ -61,7 +61,7 @@ const marker = L.marker ([46.8104,-92.0829]).addTo(map);
 marker.bindPopup("<b>At Sara's Table Chester Creek Cafe</b><br>Has Korean BBQ and Maple Lemon Brussel Sprouts").openPopup();
 
 const marker2 = L.marker ([46.7685841,-92.1218942]).addTo(map);
-marker2.bindPopup("<b>Corktown</b><br>Has Hot Honey Brussel Sprouts").openPopup();
+marker2.bindPopup("<b>Corktown Eatery & Bar</b><br>Has Hot Honey Brussel Sprouts").openPopup();
 
         //HTML content for pop-up with image - ES
 const htmlContent =`
@@ -76,6 +76,6 @@ const marker3 = L.marker ([46.8089282,-92.0619525]).addTo(map);
 </body>
 <!--Added paragraph and centered it on webpage - ES-->
     <div style="text-align: center;">
-        <p1>This map shows three different resturants in Duluth, MN that serve brussel sprouts. Each resturant shown serves a different type of brussel sprout. If you are a brussel sprout lover and are visiting Duluth soon make sure to check these resturants out!</p1>
+        <p1>This map shows three different restaurants in Duluth, MN that serve brussels sprouts. Each restaurant shown serves a different type of Brussels sprout. If you are a brussels sprout lover and are visiting Duluth soon, make sure to check these restaurants out!</p1>
     </div>
 </html>
