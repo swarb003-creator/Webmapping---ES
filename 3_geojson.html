@@ -51,7 +51,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Most Basic Web Map</title>
+    <title>Duluth Area School Attendance</title>
+    <!--Changed the website name to match the theme of the map-->
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -59,20 +60,139 @@
     <style></style>
 </head>
 <body>
-    <div id="map" style="width: 600px; height: 400px;"></div>
+    <!--CSS for the website header, subheader, and dectioption-->
+   <body>
+    <div class="container">
+        <div class="text">
+            <h1>Duluth Area School Attendance</h1>
+            <h2>By: Ella Swarbrick</h2>
+            <p>This map shows school attendance boundaries in Duluth.</p>
+        </div>
+
+        <div id="map"></div>
+    </div>
+</body>
+<!--Code to move the map to the righthand side of the webpage and the text on the lefthand side-->
+<style>
+    .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.text {
+    width: 40%;
+    text-align: left;
+}
+
+#map {
+    width: 60%;
+    height: 600px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+</style>
     
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Initialize the map, center it on UMD campus, and set the zoom level
-        const map = L.map('map').setView([46.82, -92.08], 13);
+        //my geojson supporting fuction
 
-        // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  // Source - https://stackoverflow.com/a/1484514
+    // Posted by Anatoliy, modified by community. See post 'Timeline' for change history
+    // Retrieved 2026-04-06, License - CC BY-SA 3.0
+        //Code to generate random colors for each district on the map.
+    function getRandomColor() {
+     var letters = '0123456789ABCDEF';
+     var color = '#';
+    for (var i = 0; i < 6; i++) {
+     color += letters[Math.floor(Math.random() * 16)];
+  }
+    return color;
+}
+        function attendanceAreaStyle(){
+            return{
+            color:"black",
+            weight: 2,
+            fillOpacity:  0.5,  
+            fillColor: getRandomColor()
+            }
+        }
+
+        //geojson popup function
+        function attendanceAreasPopup(feature, layer){
+        console.log('feature', feature)
+        console.log('layer', layer)
+        }
+            //pass along the json to the next function
+
+            //geogson popup funstion
+        function attendanceAreasOnEachFeature(feature, layer) {
+            const popupContent = `
+                <h3>Attendance Area Schools</h3>
+                <p><em>Elementary:</em> <b>${feature.properties.ELEM_NAME}</b></p>
+                <p><em>Middle:</em> <b>${feature.properties.MIDD_NAME}</b></p>
+                <p><em>High:</em> <b>${feature.properties.HIGH_NAME}</b></p>
+    `;
+    layer.bindPopup(popupContent);
+}
+
+//-----------------------------
+//Leaflet map code starts here
+//----------------------------
+// Initialize the map, center it on UMD campus, and set the zoom level
+//I ajusted the coordinates and zoom a little but to be able to see all of the districts.
+    const map = L.map('map').setView([46.93, -92.08], 10);
+
+// Add OpenStreetMap tiles
+//Added a different tile layer I thought better fit the map.
+        const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+}).addTo(map);
+
+        //2. Add GeoJSON of Attendance Areas to the map
+        //fetch geoJSON file
+        fetch("duluth_school_attendance_areas.json")
+            //once we fetch the geojson we need to convert the response
+            //into json format
+            .then(function(resp){
+                const responseJSON = resp.json()
+                //console.log(responseJSON) 
+                //pass along the json to the next function
+                return responseJSON
+            })
+            //take the json data (ourgeojson file's data)
+            //and create a leaflet layer based on that geojson
+         fetch("duluth_school_attendance_areas.json")
+            .then(function(resp){
+                return resp.json();
+    })
+            .then(function(geojsonData){
+                //console.log('the geojson data', geojsonData);
+
+            L.geoJSON(geojsonData, {
+            style: attendanceAreaStyle,
+            onEachFeature: attendanceAreasOnEachFeature
         }).addTo(map);
+    });
+
+    fetch("duluth_school_attendance_areas.json")
+    .then(function(resp){
+        return resp.json();
+    })
+    .then(function(geojsonData){
+        //console.log(geojsonData);
+
+        L.geoJSON(geojsonData, {
+            style: attendanceAreaStyle,
+            onEachFeature: attendanceAreasOnEachFeature
+        }).addTo(map);
+    });
+
     </script>
 </body>
 </html>
