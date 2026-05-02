@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Duluth Points of Interest</title>
+
+   <!-- Leaflet CSS stylesheet -->
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+   <!-- Changes the color, font, and size of the text -->
+   <style>
+       h1 {
+           color: rgb(164, 92, 47);
+           font-family: Georgia, 'Times New Roman', Times;
+       }
+       h4 {
+           color: rgb(80, 124, 89);
+       }
+   </style>
+</head>
+<body>
+   <!-- Header -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duluth Points of Interest</title>
+   <!--Centers the header and sub header, right aligns the paragraph. Also had font size and type again-->
+   <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            max-width: 500px;
+        }
+
+        .header h1, .header h3, .header h4 {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .header h4 p {
+            text-align: left;
+            font-size: 1.1rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!--Puts the text on the website that was styled above. Includes a header, subheader, and a paragraph-->
+    <div class="header">
+        <h1>Duluth Points of Interest</h1>
+        <h3>by: Ella Swarbrick</h3>
+        <h4>
+            <p>Duluth, Minnesota which is located on the coast of Lake Superior is known for its picturesque hiking trails, great food, fun activities, and many other amazing attractions. While you are visiting Duluth for the 2026 FDI World Dental Congress make sure to check out these ten unique attractions Duluth has to offer! The attractions are split into different categories showcased by their map marker, and each marker will display a pop-up with information about the attraction and a link to their website when clicked on. We at Local Duluth Dentist Office hope this map helps you prepare for your upcoming visit and we are looking forward to this year's conference in our beautiful city. 
+            </p>
+        </h4>
+    </div>
+   <!-- Map container, responsible for the size of the map on the website -->
+   <div id="map" style="width: 1000px; height: 600px;"></div>
+
+   <!-- Leaflet JavaScript library -->
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+   <script>
+       // Centers the map on Duluth and sets the zoom level
+       const map = L.map('map').setView([46.78, -92.10], 11);
+
+       // Add OpenStreetMap tiles
+       var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+           attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+           maxZoom: 30
+       }).addTo(map);
+
+       // Adds and sizes custom icons for the different attraction types
+       const customIcons = {
+           Shopping: L.icon({
+               iconUrl: 'https://clipart-library.com/images_k/shopping-transparent-background/shopping-transparent-background-7.jpg',
+               iconSize: [25, 25],
+               iconAnchor: [16, 20],
+               popupAnchor: [0, -20]
+           }),
+           Landmark: L.icon({
+               iconUrl: 'https://cdn.iconscout.com/icon/premium/png-256-thumb/straw-bridge-3520344-2941100.png',
+               iconSize: [25, 25],
+               iconAnchor: [16, 20],
+               popupAnchor: [0, -20]
+           }),
+           Hiking: L.icon({
+               iconUrl: 'https://static.vecteezy.com/system/resources/previews/024/031/871/original/hiker-climber-with-trekking-poles-conceptual-hero-image-outdoor-recreation-2d-cartoon-character-on-white-background-nature-walking-isolated-concept-illustration-art-for-web-design-ui-vector.jpg',
+               iconSize: [25, 25],
+               iconAnchor: [16, 20],
+               popupAnchor: [0, -20]
+           }),
+           Museum: L.icon({
+               iconUrl: 'https://listimg.pinclipart.com/picdir/s/525-5256960_free-museums-museum-clipart-png-download.png',
+               iconSize: [25, 25],
+               iconAnchor: [16, 20],
+               popupAnchor: [0, -20]
+           })
+       };
+
+       // Function to create popup content based on a cvs I intigrated into the code
+       function createPopupContent(title, imageUrl, address, website, description) {
+           return `
+               <div class="popup" style="display: flex; align-items: center; gap: 15px;">
+                   <img src="${imageUrl}" width="150px" style="order: 0;" />
+                   <div style="order: 1;">
+                       <h3>${title}</h3>
+                       <p>
+                           <strong>Address:</strong> ${address}<br>
+                           <strong>Website:</strong> <a href="${website}" target="_blank">${website}</a><br>
+                           ${description}
+                       </p>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Locations array populated from CSV
+       //Sets attracions at GPS corrdinates, adds image, link, and text to pop-up, joins it to custom map marker
+       const locations = [
+           {
+               title: "Canal Park",
+               type: "Shopping",
+               imageUrl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwikitravel.org%2Fupload%2Fshared%2Fd%2Fd5%2FCanal_Park.jpg&f=1&nofb=1&ipt=ffcb1b11b53d56e374e7dad954cea70f9fa22fda1372be3420292a745037c03b",
+               address: "Canal Park, Duluth, MN 55802",
+               website: "https://canalpark.com/",
+               description: "Canal Park is a tourist and recreation-oriented district of Duluth, Minnesota, United States. Situated across the Interstate 35 freeway from Downtown Duluth, it is connected by the famous Aerial Lift Bridge to the Park Point sandbar and neighborhood.",
+               coordinates: [46.784688, -92.095278]
+           },
+           {
+               title: "Aerial Lift Bridge",
+               type: "Landmark",
+               imageUrl: "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/going-up-duluth-aerial-lift-bridge-susan-rissi-tregoning.jpg",
+               address: "601 S Lake Ave, Duluth, MN 55802",
+               website: "http://www.goduluthmn.com/best-duluth-attractions/aerial-lift-bridge/",
+               description: "The Aerial Lift Bridge is a landmark in the port city of Duluth, Minnesota. The span began life in 1905 as the United States' first transporter bridge. In 1929–30, the span was converted to a vertical lift bridge, and continues to operate today.",
+               coordinates: [46.779422, -92.093668]
+           },
+           {
+               title: "Spirit Mountain Recreation Area",
+               type: "Hiking",
+               imageUrl: "https://realhousewivesofmn.com/wp-content/uploads/2018/03/Screen-Shot-2018-03-14-at-12.00.55-AM-1024x761.png",
+               address: "9500 Spirit Mountain Pl, Duluth, MN 55810",
+               website: "https://www.spiritmt.com/",
+               description: "Recreational mountain featuring wintertime downhill skiing & a summertime adventure park.",
+               coordinates: [46.719225, -92.206600]
+           },
+           {
+               title: "Glensheen",
+               type: "Museum",
+               imageUrl: "https://www.exploreminnesota.com/sites/default/files/listing_images/c08b6810cd5d438e4cd2c104bb41688b9e41dffa.jpg",
+               address: "3300 London Rd, Duluth, MN 55804",
+               website: "https://glensheen.org/",
+               description: "Glensheen, the Historic Congdon Estate is a 20,000 square foot mansion in Duluth, Minnesota, United States, operated by the University of Minnesota Duluth as a historic house museum.",
+               coordinates: [46.815544, -92.051442]
+           },
+           {
+               title: "Great Lakes Aquarium",
+               type: "Museum",
+               imageUrl: "https://mommybunch.com/wp-content/uploads/2016/07/great-lakes-aquarium-tank.jpg",
+               address: "353 Harbor Dr, Duluth, MN 55802",
+               website: "https://glaquarium.org/",
+               description: "The Great Lakes Aquarium opened in 2000 and is located on the Duluth waterfront. A 501 private nonprofit, its mission is to inspire people to explore their connection to Lake Superior and waters of the world.",
+               coordinates: [46.779192, -92.100034]
+           },
+           {
+               title: "Jay Cooke State Park",
+               type: "Hiking",
+               imageUrl: "https://i.redd.it/pe4szjsh66711.jpg",
+               address: "780 MN-210, Carlton, MN 55718",
+               website: "https://www.dnr.state.mn.us/state_parks/park.html?id=spk00187#homepage",
+               description: "Jay Cooke State Park is a state park of Minnesota, United States, protecting the lower reaches of the St. Louis River. The park is located about 10 miles southwest of Duluth and is one of the ten most visited state parks in Minnesota. The western half of the park contains part of a rocky, 13-mile gorge.",
+               coordinates: [46.655244, -92.370823]
+           },
+           {
+               title: "North Shore Scenic Railroad",
+               type: "Landmark",
+               imageUrl: "https://lh3.googleusercontent.com/-jum53AdNMgY/Ugak0f_WT9I/AAAAAAAAAKY/TziGLVO3oZAdMJqJshEFJPYISPMwb93-gCLIBGAYYCw/w100-h134-n-k-no/",
+               address: "506 W Michigan St, Duluth, MN 55802",
+               website: "http://www.northshorescenicrailroad.org/",
+               description: "Seasonal narrated train tours follow a historic transport corridor for short, long & themed rides.",
+               coordinates: [46.781308, -92.103861]
+           },
+           {
+               title: "Lincoln Park",
+               type: "Shopping",
+               imageUrl: "https://northshoreexplorermn.com/wp-content/uploads/2022/01/06-04-2021-Lincoln-Park_phone-8-2-REV-MD-2-1024x461.jpg",
+               address: "Lincoln Park Dr, Duluth, MN 55806",
+               website: "https://visitlnpk.com/about",
+               description: "Lincoln Park is Duluth's up and coming shopping and dining district, with a plethora of small businesses and locally owned restaurants and breweries.",
+               coordinates: [46.768445, -92.139180]
+           },
+           {
+               title: "Seven Bridge Road",
+               type: "Hiking",
+               imageUrl: "https://tse2.mm.bing.net/th/id/OIP.n-DMTasWS_oj2dX4_2iPpgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+               address: "Seven Bridges Rd, Duluth, MN 55804",
+               website: "https://www.susantregoning.com/blog/seven-bridges-road",
+               description: "Seven Bridge Road is a unique 4-mile stretch of road that crosses seven beautiful bridges over Amity Creek. The road features a short scenic drive and a plethora of hiking trails surrounding it.",
+               coordinates: [46.874250, -92.011273]
+           },
+           {
+               title: "Hawk Ridge Bird Observatory",
+               type: "Hiking",
+               imageUrl: "https://queticosuperior.org/wp-content/uploads/2025/10/hawk-ridge-549734977_1222019886631160_6373226392900004610_n.jpg",
+               address: "3980 E Skyline Pkwy, Duluth, MN 55804",
+               website: "https://www.hawkridge.org/",
+               description: "Hawk Ridge Bird Observatory is a beautiful outlook over Duluth. It is a great place to watch bird migration and go for a hike during the day, or look for Northern Lights and star gaze at night.",
+               coordinates: [46.840991, -92.042172]
+           }
+       ];
+
+       // Add markers for each location, add pop-ups to map, make sure everything is appreaing at the correct location
+       locations.forEach(location => {
+           const marker = L.marker(location.coordinates, {
+               icon: customIcons[location.type] || customIcons.Shopping
+           })
+           .addTo(map)
+           .bindPopup(createPopupContent(
+               location.title,
+               location.imageUrl,
+               location.address,
+               location.website,
+               location.description
+           ));
+       });
+   </script>
+</body>
+</html>
